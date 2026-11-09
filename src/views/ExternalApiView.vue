@@ -26,7 +26,7 @@
       </article>
     </TransitionGroup>
     <p v-if="loaded && !loading && !error && !products.length" class="muted">La consulta fue correcta, pero el servicio no devolvió productos.</p>
-    <div class="about-panel api-info"><h2>Qué estamos probando</h2><p>Una consulta real a Internet, la lectura de la respuesta JSON y el manejo de estados HTTP, espera y errores. Los precios de esta sección se muestran en USD, sin conversión a pesos.</p><p>Google Cloud todavía no está integrado. Para probarlo necesitaremos conocer el servicio y el método de autenticación indicado por el profesor.</p><p>Fuente: <a href="https://dummyjson.com/docs/products" target="_blank" rel="noopener noreferrer">documentación de DummyJSON</a>.</p></div>
+    <div class="about-panel api-info"><h2>Qué estamos probando</h2><p>Una consulta real a Internet, la lectura de la respuesta JSON y el manejo de estados HTTP, espera y errores. Los precios de esta sección se muestran en USD, sin conversión a pesos.</p><p>Fuente: <a href="https://dummyjson.com/docs/products" target="_blank" rel="noopener noreferrer">documentación de DummyJSON</a>.</p></div>
   </section>
 </template>
 

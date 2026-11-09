@@ -52,7 +52,7 @@ Importar el repositorio desde GitHub.
 - Compilación: npm run build.
 - Carpeta de salida: dist.
 - Raíz: carpeta que contiene este package.json.
-- Variables de entorno: ninguna para esta demostración.
+- Variables de entorno: las dos variables públicas de Supabase en `.env.example`.
 
 vercel.json incluye la reescritura a index.html para las rutas de Vue Router.
 Comprobar /productos/1 y /api también al abrirlos directamente y actualizar.
@@ -65,6 +65,7 @@ Comprobar /productos/1 y /api también al abrirlos directamente y actualizar.
 - src/components/: SiteNav, SiteFooter, ProductArtwork, ProductCard,
   CatalogFilters y EmptyState.
 - src/data/products.js: los 15 productos locales y formato de precios.
+- src/services/catalog.js: lectura compartida del catálogo y respaldo de muestra.
 - src/services/productApi.js: Fetch y validación de la respuesta externa.
 - src/styles/main.css: estilos, tamaños adaptables y animaciones.
 - public/index.html: HTML donde Vue monta la SPA.
@@ -79,9 +80,21 @@ Los filtros se restablecen al volver al listado; no se guardan.
 
 ## Alcance pendiente
 Esta es una demostración de avance, no el examen completo.
-Faltan CRUD, Alta/Edición, validaciones de formulario, Supabase y carrito
+Faltan escritura de productos, Alta/Edición, validaciones de formulario y carrito
 persistido en LocalStorage. También completar integrantes y video de entrega.
-El catálogo actual se importa desde un archivo local y no se guarda en una base.
+
+## Catálogo de Supabase
+
+En SQL Editor del proyecto de Nexo, ejecutar el archivo
+`supabase/migrations/20261109000000_create_products.sql` una sola vez.
+Crea `public.products` y carga los 15 productos con sus IDs originales.
+El resultado esperado es `productos_cargados = 15`. Los visitantes y las
+cuentas con sesión pueden leer el catálogo, con permisos de solo lectura.
+
+En el navegador, abrir Catálogo y comprobar que diga **Datos de Supabase**.
+Probar una búsqueda, un filtro, una ficha directa en `/productos/1` y su
+recarga. Si la consulta falla, se identifican los datos de muestra y se
+ofrece reintentar. La versión portátil usa el respaldo local.
 
 ## Inicio de sesión con Google
 
@@ -105,9 +118,8 @@ Para publicar, configurar las dos variables públicas de `.env.example` en
 Vercel y volver a compilar. El secreto de Google se guarda en el proveedor
 Google de Supabase. Las variables `VUE_APP_*` son visibles en el navegador.
 
-Estado de la prueba: el proyecto de Supabase respondió con HTTP 200 y el
-proveedor Google figura deshabilitado. El inicio de sesión real queda
-pendiente de habilitar el proveedor y autorizar las redirecciones.
+Estado de la prueba: el usuario confirmó el inicio de sesión local y la
+versión pública sirve la ruta `/cuenta` con la configuración de Supabase.
 
 ## Referencias
 - API: https://dummyjson.com/docs/products

@@ -1,4 +1,4 @@
-// Datos de demostración: todavía no se consultan servicios externos.
+// Respaldo del catálogo para la demo portátil o cuando Supabase no responde.
 export const products = [
   { id: 1, name: 'Auriculares Studio', category: 'Audio', price: 89900, symbol: '🎧', color: 'lavender', description: 'Auriculares de diadema para acompañar tus sesiones de estudio y música.' },
   { id: 2, name: 'Teclado compacto', category: 'Escritorio', price: 64900, symbol: '⌨️', color: 'sand', description: 'Un teclado de formato compacto para un escritorio más despejado.' },
