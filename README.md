@@ -1,13 +1,34 @@
-# Nexo — Versión para mostrar al profesor
+# Nexo · Catálogo de productos
 
-SPA de catálogo de productos, creada con Vue 3, Vue CLI 5 y Vue Router 4.
-Integrantes: pendiente de completar.
+Aplicación de página única para explorar productos de audio, escritorio y
+accesorios, guardar una selección y administrar el catálogo.
+
+Proyecto realizado por **Rodrigo Punturiero**.
+
+[Abrir Nexo en Vercel](https://nexo-catalogo-spa-rosy.vercel.app/)
+
+## Tecnologías
+
+Vue 3, Vue CLI 5, Vue Router 4, JavaScript y CSS. Supabase aporta el catálogo
+en PostgreSQL y el inicio de sesión con Google OAuth. El catálogo usa Fetch,
+y el carrito y el tema usan LocalStorage. GitHub guarda el código y Vercel
+publica la aplicación.
+
+## Capturas
+
+Inicio en escritorio
+
+![Portada de Nexo con el catálogo destacado](docs/capturas/desktop.jpg)
+
+Modo noche en celular
+
+![Nexo en modo noche en una pantalla de 390 píxeles](docs/capturas/mobile.jpg)
 
 ## Funcionalidades disponibles
-- Inicio, listado de 15 productos de demostración, detalle y Acerca de.
+- Inicio, listado de productos, detalle y Acerca de. La base inicia con 15 productos de muestra.
 - Búsqueda por texto sin distinción de tildes o mayúsculas.
 - Filtro por categoría y orden por nombre o precio.
-- Seis componentes reutilizables, props, emits y propiedades computadas.
+- Componentes reutilizables, props, emits y propiedades computadas.
 - Diseño adaptable a celular, tablet y escritorio.
 - Catálogo conectado a la API REST de Supabase mediante Fetch, con carga,
   tiempo máximo de 8 segundos, validación de respuesta, respaldo y reintento.
@@ -16,6 +37,7 @@ Integrantes: pendiente de completar.
 - Páginas para productos y rutas inexistentes.
 - Carrito con cantidades, total estimado y persistencia en LocalStorage.
 - Modo noche con preferencia guardada y filtros del catálogo en la URL.
+- Inicio de sesión con Google y alta, edición y eliminación confirmada para administradores.
 
 Los precios del catálogo local son ficticios y se muestran en ARS.
 Las ilustraciones locales son emojis; pueden verse diferentes según el sistema.
@@ -77,10 +99,6 @@ ProductCard recibe un producto y enlaza al detalle por identificador.
 El catálogo consulta Supabase mediante Fetch con un tiempo máximo de 8 segundos.
 Si la consulta falla, se identifica el respaldo de muestra y se ofrece reintentar.
 Los filtros se guardan en la URL y se conservan al abrir una ficha y volver al listado.
-
-## Alcance pendiente
-Esta es una demostración de avance, no el examen completo.
-Falta completar integrantes y video de entrega.
 
 ## Carrito
 
