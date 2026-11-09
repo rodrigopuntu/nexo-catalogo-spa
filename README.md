@@ -14,6 +14,7 @@ Integrantes: pendiente de completar.
 - Hooks created(), mounted() y beforeUnmount() en la consulta externa.
 - Transition para los estados y TransitionGroup para los resultados.
 - Páginas para productos y rutas inexistentes.
+- Carrito con cantidades, total estimado y persistencia en LocalStorage.
 
 Los precios del catálogo local son ficticios y se muestran en ARS.
 Los precios de DummyJSON se muestran en USD sin conversión.
@@ -66,6 +67,7 @@ Comprobar /productos/1 y /api también al abrirlos directamente y actualizar.
   CatalogFilters y EmptyState.
 - src/data/products.js: los 15 productos locales y formato de precios.
 - src/services/catalog.js: lectura compartida del catálogo y respaldo de muestra.
+- src/services/cart.js: cantidades compartidas y persistencia del carrito.
 - src/services/productApi.js: Fetch y validación de la respuesta externa.
 - src/styles/main.css: estilos, tamaños adaptables y animaciones.
 - public/index.html: HTML donde Vue monta la SPA.
@@ -80,8 +82,19 @@ Los filtros se restablecen al volver al listado; no se guardan.
 
 ## Alcance pendiente
 Esta es una demostración de avance, no el examen completo.
-Falta el carrito persistido en LocalStorage.
-También completar integrantes y video de entrega.
+Falta completar integrantes y video de entrega.
+
+## Carrito
+
+Se puede agregar desde una tarjeta o ficha y abrir **Carrito** desde la
+navegación. La selección se guarda por navegador y sitio. El carrito
+conserva identificadores y cantidades, y calcula el total con los precios
+del catálogo cargado. Un producto que ya no está disponible queda fuera
+del total y se puede quitar de la lista.
+
+Para verificarlo, agregar un producto dos veces, cambiar su cantidad,
+recargar `/carrito` y comprobar que se conservan la cantidad y el total.
+Luego quitarlo y comprobar el estado vacío.
 
 ## Catálogo de Supabase
 
