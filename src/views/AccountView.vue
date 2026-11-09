@@ -12,6 +12,7 @@
         <template v-if="user">
           <h2>Sesión iniciada</h2>
           <p>{{ user.email }}</p>
+          <p><router-link class="text-link" :to="{ name: 'product-admin' }">Administrar productos ↗</router-link></p>
           <button class="button" :disabled="busy" @click="signOut">Cerrar sesión</button>
         </template>
         <button v-else class="button" :disabled="busy" @click="signIn">{{ busy ? 'Abriendo Google…' : 'Ingresar con Google' }}</button>

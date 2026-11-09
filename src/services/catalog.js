@@ -9,17 +9,23 @@ const state = reactive({
 })
 
 export const catalog = readonly(state)
+const productColumns = 'id,name,category,price,symbol,color,description'
+let pendingLoad = null
 
-export async function loadCatalog() {
-  if (!supabase || state.source === 'loading' || state.source === 'supabase') return
+export function loadCatalog() {
+  if (!supabase || state.source === 'supabase') return
+  if (!pendingLoad) pendingLoad = fetchCatalog().finally(() => { pendingLoad = null })
+  return pendingLoad
+}
 
+async function fetchCatalog() {
   state.source = 'loading'
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 8000)
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('id,name,category,price,symbol,color,description')
+      .select(productColumns)
       .order('id')
       .abortSignal(controller.signal)
 
@@ -32,4 +38,15 @@ export async function loadCatalog() {
   } finally {
     clearTimeout(timeout)
   }
+}
+
+export async function saveProduct(product, id) {
+  const table = supabase.from('products')
+  const request = id == null ? table.insert(product) : table.update(product).eq('id', id)
+  const { data, error } = await request.select(productColumns).single()
+  if (error) throw error
+
+  state.products = [...state.products.filter(item => item.id !== data.id), data]
+    .sort((a, b) => a.id - b.id)
+  return data
 }

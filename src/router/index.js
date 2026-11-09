@@ -6,6 +6,7 @@ import AboutView from '../views/AboutView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 import ExternalApiView from '../views/ExternalApiView.vue'
 import AccountView from '../views/AccountView.vue'
+import ProductAdminView from '../views/ProductAdminView.vue'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView, meta: { title: 'Inicio' } },
@@ -14,6 +15,7 @@ const routes = [
   { path: '/acerca-de', name: 'about', component: AboutView, meta: { title: 'Acerca de' } },
   { path: '/api', name: 'external-api', component: ExternalApiView, meta: { title: 'API externa' } },
   { path: '/cuenta', name: 'account', component: AccountView, meta: { title: 'Mi cuenta' } },
+  { path: '/admin/productos', name: 'product-admin', component: ProductAdminView, meta: { title: 'Administrar productos' } },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFoundView, meta: { title: 'Página no encontrada' } }
 ]
 

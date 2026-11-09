@@ -7,7 +7,7 @@
     <div class="about-panel"><h2>Cómo está construida</h2><p>Vue 3 con Vue CLI, Vue Router, componentes reutilizables, props, eventos y propiedades computadas. La navegación funciona dentro de una única aplicación.</p></div>
     <div class="about-panel"><h2>Consulta a una API</h2><p>La sección API externa obtiene productos de DummyJSON mediante Fetch y muestra carga, resultados y errores. Necesita conexión a Internet.</p><router-link class="text-link" to="/api">Probar consulta ↗</router-link></div>
     <div class="about-panel"><h2>Cuenta y catálogo</h2><p>Podés ingresar con Google desde Mi cuenta. El catálogo está abierto a visitantes y consulta Supabase cuando hay conexión.</p></div>
-    <div class="about-panel"><h2>Lo que sigue</h2><p>Formulario para administrar productos y carrito guardado en el navegador.</p></div>
+    <div class="about-panel"><h2>Administración</h2><p>Las cuentas autorizadas pueden crear y editar productos desde Mi cuenta.</p></div>
     <p class="muted">Los productos y precios son ilustrativos.</p>
   </section>
 </template>

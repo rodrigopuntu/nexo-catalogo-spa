@@ -80,8 +80,8 @@ Los filtros se restablecen al volver al listado; no se guardan.
 
 ## Alcance pendiente
 Esta es una demostración de avance, no el examen completo.
-Faltan escritura de productos, Alta/Edición, validaciones de formulario y carrito
-persistido en LocalStorage. También completar integrantes y video de entrega.
+Faltan eliminación de productos y carrito persistido en LocalStorage.
+También completar integrantes y video de entrega.
 
 ## Catálogo de Supabase
 
@@ -95,6 +95,24 @@ En el navegador, abrir Catálogo y comprobar que diga **Datos de Supabase**.
 Probar una búsqueda, un filtro, una ficha directa en `/productos/1` y su
 recarga. Si la consulta falla, se identifican los datos de muestra y se
 ofrece reintentar. La versión portátil usa el respaldo local.
+
+## Administración del catálogo
+
+Ejecutar una vez `supabase/migrations/20261109081622_add_product_admins.sql`
+en SQL Editor, después de crear el catálogo. Para habilitar una cuenta que ya
+inició sesión, copiar su UID desde **Authentication → Users** y ejecutar:
+
+```sql
+insert into public.product_admins (user_id)
+values ('REEMPLAZAR-POR-EL-UID')
+on conflict (user_id) do nothing;
+```
+
+En Nexo, entrar a **Mi cuenta → Administrar productos**. Elegir crear un
+producto o seleccionar uno existente. Comprobar que el formulario rechace
+campos inválidos y que los cambios guardados aparezcan al volver al catálogo.
+Las reglas de Supabase limitan la escritura a las cuentas autorizadas. Los
+visitantes conservan el acceso de lectura al catálogo.
 
 ## Inicio de sesión con Google
 
