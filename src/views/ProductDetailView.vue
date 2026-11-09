@@ -1,6 +1,6 @@
 <template>
   <div class="container page-space">
-    <router-link class="back-link" to="/productos">← Volver al catálogo</router-link>
+    <router-link class="back-link" :to="{ name: 'catalog', query: $route.query }">← Volver al catálogo</router-link>
     <p v-if="catalog.loading" class="notice" role="status">Cargando producto…</p>
     <p v-if="catalog.source === 'fallback'" class="notice" role="status">No pudimos cargar Supabase. Estás viendo los datos de muestra.</p>
     <section v-if="product && !catalog.loading" class="detail-layout">
@@ -10,7 +10,6 @@
         <h1>{{ product.name }}</h1>
         <p class="detail-price">{{ formatPrice(product.price) }}</p>
         <p class="intro">{{ product.description }}</p>
-        <div class="notice"><strong>Producto de demostración</strong><p>Los datos y precios son ilustrativos.</p></div>
         <div class="detail-cart-actions">
           <AddToCartButton :product-id="product.id" :name="product.name" />
           <router-link class="button button-light" to="/carrito">Ver carrito</router-link>
@@ -18,7 +17,7 @@
       </div>
     </section>
     <EmptyState v-else-if="!catalog.loading" title="Producto no encontrado" message="Este producto no está disponible en el catálogo actual.">
-      <router-link class="button" to="/productos">Ver catálogo</router-link>
+      <router-link class="button" :to="{ name: 'catalog', query: $route.query }">Ver catálogo</router-link>
     </EmptyState>
   </div>
 </template>

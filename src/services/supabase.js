@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
-const url = process.env.VUE_APP_SUPABASE_URL
-const key = process.env.VUE_APP_SUPABASE_PUBLISHABLE_KEY
+export const supabaseUrl = process.env.VUE_APP_SUPABASE_URL
+export const supabasePublishableKey = process.env.VUE_APP_SUPABASE_PUBLISHABLE_KEY
 
-export const supabase = url && key?.startsWith('sb_publishable_') && window.location.protocol !== 'file:'
-  ? createClient(url, key, { auth: { flowType: 'pkce' } })
+export const supabase = supabaseUrl && supabasePublishableKey?.startsWith('sb_publishable_') && window.location.protocol !== 'file:'
+  ? createClient(supabaseUrl, supabasePublishableKey, { auth: { flowType: 'pkce' } })
   : null

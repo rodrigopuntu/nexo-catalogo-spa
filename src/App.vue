@@ -1,6 +1,7 @@
 <template>
+  <a class="skip-link" href="#contenido" @click.prevent="$refs.content.focus()">Saltar al contenido</a>
   <SiteNav />
-  <main id="contenido">
+  <main id="contenido" ref="content" tabindex="-1">
     <router-view />
   </main>
   <SiteFooter />

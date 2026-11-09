@@ -9,15 +9,15 @@ Integrantes: pendiente de completar.
 - Filtro por categoría y orden por nombre o precio.
 - Seis componentes reutilizables, props, emits y propiedades computadas.
 - Diseño adaptable a celular, tablet y escritorio.
-- Sección API externa (/api): Fetch real a DummyJSON, carga, resultados,
-  error HTTP, tiempo máximo de 12 segundos, validación de respuesta y reintento.
-- Hooks created(), mounted() y beforeUnmount() en la consulta externa.
-- Transition para los estados y TransitionGroup para los resultados.
+- Catálogo conectado a la API REST de Supabase mediante Fetch, con carga,
+  tiempo máximo de 8 segundos, validación de respuesta, respaldo y reintento.
+- Transition para el aviso de respaldo y TransitionGroup para los resultados.
+- El catálogo restaura sus filtros en created() y consulta la API en mounted().
 - Páginas para productos y rutas inexistentes.
 - Carrito con cantidades, total estimado y persistencia en LocalStorage.
+- Modo noche con preferencia guardada y filtros del catálogo en la URL.
 
 Los precios del catálogo local son ficticios y se muestran en ARS.
-Los precios de DummyJSON se muestran en USD sin conversión.
 Las ilustraciones locales son emojis; pueden verse diferentes según el sistema.
 No se realizan compras.
 
@@ -39,9 +39,7 @@ La carpeta dist se genera con build. No editar los archivos generados.
 La etapa 1 pasó lint y build en la terminal del usuario.
 La etapa 2 se verificó en navegador: navegación, búsqueda, filtros, detalle,
 estados vacíos y vista móvil de 390 px, sin errores de consola.
-El cliente de API pasó cinco pruebas: resultado correcto, HTTP 503, formato
-inválido, lista vacía y cancelación. La validación final de esta versión
-se registra en VERIFICACION.md.
+La validación inicial se registra en VERIFICACION.md.
 
 La instalación inicial informó 15 alertas de dependencias de Vue CLI.
 No se aplicaron actualizaciones forzadas que cambien el scaffold.
@@ -56,7 +54,7 @@ Importar el repositorio desde GitHub.
 - Variables de entorno: las dos variables públicas de Supabase en `.env.example`.
 
 vercel.json incluye la reescritura a index.html para las rutas de Vue Router.
-Comprobar /productos/1 y /api también al abrirlos directamente y actualizar.
+Comprobar /productos/1 y /carrito también al abrirlos directamente y actualizar.
 
 ## Estructura y defensa oral
 - src/main.js: monta Vue e instala el router.
@@ -66,9 +64,9 @@ Comprobar /productos/1 y /api también al abrirlos directamente y actualizar.
 - src/components/: SiteNav, SiteFooter, ProductArtwork, ProductCard,
   CatalogFilters y EmptyState.
 - src/data/products.js: los 15 productos locales y formato de precios.
-- src/services/catalog.js: lectura compartida del catálogo y respaldo de muestra.
+- src/services/catalog.js: lectura mediante Fetch, respaldo de muestra y CRUD.
 - src/services/cart.js: cantidades compartidas y persistencia del carrito.
-- src/services/productApi.js: Fetch y validación de la respuesta externa.
+- src/services/theme.js: cambio de tema y persistencia de la preferencia.
 - src/styles/main.css: estilos, tamaños adaptables y animaciones.
 - public/index.html: HTML donde Vue monta la SPA.
 
@@ -76,9 +74,9 @@ CatalogView guarda búsqueda, categoría y orden en data().
 Pasa los valores como props a CatalogFilters, que emite los cambios.
 Las computed filtran y ordenan sin modificar el catálogo original.
 ProductCard recibe un producto y enlaza al detalle por identificador.
-ExternalApiView consulta en mounted(), prepara el formato en created() y
-cancela la petición al salir. Un error externo no impide ver el catálogo local.
-Los filtros se restablecen al volver al listado; no se guardan.
+El catálogo consulta Supabase mediante Fetch con un tiempo máximo de 8 segundos.
+Si la consulta falla, se identifica el respaldo de muestra y se ofrece reintentar.
+Los filtros se guardan en la URL y se conservan al abrir una ficha y volver al listado.
 
 ## Alcance pendiente
 Esta es una demostración de avance, no el examen completo.
@@ -104,7 +102,7 @@ Crea `public.products` y carga los 15 productos con sus IDs originales.
 El resultado esperado es `productos_cargados = 15`. Los visitantes y las
 cuentas con sesión pueden leer el catálogo, con permisos de solo lectura.
 
-En el navegador, abrir Catálogo y comprobar que diga **Datos de Supabase**.
+En el navegador, abrir Catálogo y comprobar que muestre los productos de la base.
 Probar una búsqueda, un filtro, una ficha directa en `/productos/1` y su
 recarga. Si la consulta falla, se identifican los datos de muestra y se
 ofrece reintentar. La versión portátil usa el respaldo local.
@@ -157,6 +155,6 @@ Estado de la prueba: el usuario confirmó el inicio de sesión local y la
 versión pública sirve la ruta `/cuenta` con la configuración de Supabase.
 
 ## Referencias
-- API: https://dummyjson.com/docs/products
+- API REST: https://supabase.com/docs/guides/api
 - Vue CLI: https://cli.vuejs.org/guide/
 - Router en Vercel: https://router.vuejs.org/guide/essentials/history-mode

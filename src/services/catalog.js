@@ -1,6 +1,6 @@
 import { reactive, readonly } from 'vue'
 import { products as sampleProducts } from '../data/products'
-import { supabase } from './supabase'
+import { supabase, supabasePublishableKey, supabaseUrl } from './supabase'
 
 const state = reactive({
   products: supabase ? [] : sampleProducts,
@@ -23,13 +23,21 @@ async function fetchCatalog() {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 8000)
   try {
-    const { data, error } = await supabase
-      .from('products')
-      .select(productColumns)
-      .order('id')
-      .abortSignal(controller.signal)
+    const endpoint = new URL('/rest/v1/products', supabaseUrl)
+    endpoint.search = new URLSearchParams({ select: productColumns, order: 'id.asc' })
+    const response = await fetch(endpoint, {
+      headers: { apikey: supabasePublishableKey },
+      signal: controller.signal,
+      cache: 'no-store'
+    })
+    if (!response.ok) throw new Error('Error HTTP al cargar el catálogo')
 
-    if (error) throw error
+    const data = await response.json()
+    if (!Array.isArray(data) || !data.every(product => Number.isSafeInteger(product?.id) &&
+      Number.isInteger(product.price) && product.price >= 0 &&
+      ['name', 'category', 'symbol', 'color', 'description'].every(field => typeof product[field] === 'string'))) {
+      throw new Error('Respuesta del catálogo inválida')
+    }
     state.products = data
     state.source = 'supabase'
   } catch {

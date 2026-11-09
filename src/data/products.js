@@ -22,3 +22,18 @@ export function formatPrice(value) {
     style: 'currency', currency: 'ARS', maximumFractionDigits: 0
   }).format(value)
 }
+
+export function categoryKey(category) {
+  return category.trim().normalize('NFC').toLocaleLowerCase('es')
+}
+
+export function getCategories(products) {
+  const categories = new Map()
+  for (const { category, symbol } of products) {
+    const key = categoryKey(category)
+    if (!key || categories.has(key)) continue
+    const name = category.trim()
+    categories.set(key, { name: name.charAt(0).toLocaleUpperCase('es') + name.slice(1), symbol })
+  }
+  return [...categories.values()]
+}

@@ -4,7 +4,6 @@ import CatalogView from '../views/CatalogView.vue'
 import ProductDetailView from '../views/ProductDetailView.vue'
 import AboutView from '../views/AboutView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
-import ExternalApiView from '../views/ExternalApiView.vue'
 import AccountView from '../views/AccountView.vue'
 import ProductAdminView from '../views/ProductAdminView.vue'
 import CartView from '../views/CartView.vue'
@@ -14,7 +13,7 @@ const routes = [
   { path: '/productos', name: 'catalog', component: CatalogView, meta: { title: 'Catálogo' } },
   { path: '/productos/:id', name: 'product-detail', component: ProductDetailView, meta: { title: 'Detalle del producto' } },
   { path: '/acerca-de', name: 'about', component: AboutView, meta: { title: 'Acerca de' } },
-  { path: '/api', name: 'external-api', component: ExternalApiView, meta: { title: 'API externa' } },
+  { path: '/api', redirect: { name: 'catalog' } },
   { path: '/cuenta', name: 'account', component: AccountView, meta: { title: 'Mi cuenta' } },
   { path: '/carrito', name: 'cart', component: CartView, meta: { title: 'Carrito' } },
   { path: '/admin/productos', name: 'product-admin', component: ProductAdminView, meta: { title: 'Administrar productos' } },
@@ -27,7 +26,10 @@ const router = createRouter({
     ? createWebHashHistory()
     : createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior() { return { top: 0 } }
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition
+    return to.path === from.path ? false : { top: 0 }
+  }
 })
 
 router.afterEach(to => {

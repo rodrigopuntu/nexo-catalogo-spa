@@ -4,8 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>Catálogo de productos</title>
+    <link rel="icon" href="<%= BASE_URL %>nexo.svg" type="image/svg+xml">
+    <meta name="description" content="Nexo. Accesorios, audio y objetos para tu escritorio.">
+    <title>Nexo · Objetos para tu día</title>
+    <script>
+      (function () {
+        var theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        try {
+          var saved = window.localStorage.getItem('nexo.theme')
+          if (saved === 'light' || saved === 'dark') theme = saved
+        } catch (error) { /* Use the device preference when storage is blocked. */ }
+        document.documentElement.dataset.theme = theme
+      }())
+    </script>
   </head>
   <body>
     <noscript>

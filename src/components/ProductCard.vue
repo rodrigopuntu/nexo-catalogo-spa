@@ -1,6 +1,6 @@
 <template>
   <article class="product-card catalog-card">
-    <router-link class="card-link" :to="{ name: 'product-detail', params: { id: product.id } }">
+    <router-link class="card-link" :to="{ name: 'product-detail', params: { id: product.id }, query: detailQuery }">
       <ProductArtwork :product="product" />
       <div class="card-body">
         <p class="eyebrow">{{ product.category }}</p>
@@ -23,7 +23,10 @@ import { formatPrice } from '../data/products'
 export default {
   name: 'ProductCard',
   components: { AddToCartButton, ProductArtwork },
-  props: { product: { type: Object, required: true } },
+  props: {
+    product: { type: Object, required: true },
+    detailQuery: { type: Object, default: () => ({}) }
+  },
   methods: { formatPrice }
 }
 </script>

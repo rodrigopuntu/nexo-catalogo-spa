@@ -217,12 +217,12 @@ export default {
 .product-form label { display: block; font-size: .9rem; font-weight: 600; margin-bottom: .35rem; }
 .product-form-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 1rem; margin: 1rem 0; }
 .product-form-description { grid-column: 1 / -1; }
-.product-form textarea { width: 100%; font: inherit; color: inherit; border: 1px solid #cdd6cb; border-radius: 6px; padding: 12px; resize: vertical; }
-.product-form .field-error { color: #8a351e; }
-.product-form [aria-invalid='true'] { border-color: #a34b2b; }
+.product-form textarea { width: 100%; font: inherit; color: inherit; background: var(--surface); border: 1px solid var(--line); border-radius: 9px; padding: 12px; resize: vertical; }
+.product-form .field-error { color: var(--danger); }
+.product-form [aria-invalid='true'] { border-color: var(--danger); }
 .product-form-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
-.product-form .delete-notice { background: #fff0e9; border-color: #a34b2b; }
+.product-form .delete-notice { background: var(--danger-bg); border-color: var(--danger); }
 .product-form .delete-notice h2 { font-size: 1rem; }
-.product-form .danger-button { color: white; background: #8a351e; border-color: #8a351e; }
-.product-form .danger-button:hover:not(:disabled) { background: #672613; }
+.product-form .danger-button { color: var(--danger); background: var(--danger-bg); border-color: var(--danger); }
+.product-form .danger-button:hover:not(:disabled) { background: var(--surface); }
 </style>
