@@ -7,6 +7,7 @@
         <router-link to="/productos" active-class="is-active">Catálogo</router-link>
         <router-link to="/api" active-class="is-active">API externa</router-link>
         <router-link to="/acerca-de" active-class="is-active">Acerca de</router-link>
+        <router-link to="/cuenta" active-class="is-active">Mi cuenta</router-link>
       </nav>
       <span class="demo-tag">Proyecto académico</span>
     </div>

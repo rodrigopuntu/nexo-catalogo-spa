@@ -83,14 +83,31 @@ Faltan CRUD, Alta/Edición, validaciones de formulario, Supabase y carrito
 persistido en LocalStorage. También completar integrantes y video de entrega.
 El catálogo actual se importa desde un archivo local y no se guarda en una base.
 
-Google Cloud NO está integrado. Hace falta conocer:
-1. Servicio y API exactos.
-2. Ejemplo de petición y respuesta.
-3. Método de autenticación.
-4. Restricciones de dominio/origen y permisos de la clave.
-5. Si requiere backend para custodiar credenciales.
-No pegar credenciales privadas en el navegador, código o repositorio.
-Las variables VUE_APP_* se incluyen en el JavaScript público; no son una bóveda.
+## Inicio de sesión con Google
+
+Mi cuenta (`/cuenta`) usa Supabase Auth con OAuth y PKCE. El catálogo sigue
+disponible para visitantes. Para probar el inicio de sesión:
+
+1. Copiar `.env.example` a `.env.local` y completar la clave pública de Supabase.
+2. En Supabase, abrir **Authentication → Sign In / Providers → Google** y
+   configurar el ID del cliente OAuth web y el secreto vigente de Google.
+3. En el cliente OAuth de Google Cloud, agregar como URI de redirección
+   autorizada `https://ubxelincfpaqluvqantq.supabase.co/auth/v1/callback`.
+4. En Supabase, configurar **Authentication → URL Configuration**. Usar
+   `https://nexo-catalogo-spa-rosy.vercel.app` como Site URL y permitir
+   `https://nexo-catalogo-spa-rosy.vercel.app/cuenta` y
+   `http://localhost:8080/cuenta` como Redirect URLs. Si el servidor local
+   usa otro puerto, autorizar la URL de retorno con ese puerto.
+5. Ejecutar `npm run serve`, abrir Mi cuenta e iniciar sesión. Comprobar que
+   aparece el correo, recargar la página y probar Cerrar sesión.
+
+Para publicar, configurar las dos variables públicas de `.env.example` en
+Vercel y volver a compilar. El secreto de Google se guarda en el proveedor
+Google de Supabase. Las variables `VUE_APP_*` son visibles en el navegador.
+
+Estado de la prueba: el proyecto de Supabase respondió con HTTP 200 y el
+proveedor Google figura deshabilitado. El inicio de sesión real queda
+pendiente de habilitar el proveedor y autorizar las redirecciones.
 
 ## Referencias
 - API: https://dummyjson.com/docs/products
