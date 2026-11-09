@@ -80,7 +80,7 @@ Los filtros se restablecen al volver al listado; no se guardan.
 
 ## Alcance pendiente
 Esta es una demostración de avance, no el examen completo.
-Faltan eliminación de productos y carrito persistido en LocalStorage.
+Falta el carrito persistido en LocalStorage.
 También completar integrantes y video de entrega.
 
 ## Catálogo de Supabase
@@ -111,6 +111,10 @@ on conflict (user_id) do nothing;
 En Nexo, entrar a **Mi cuenta → Administrar productos**. Elegir crear un
 producto o seleccionar uno existente. Comprobar que el formulario rechace
 campos inválidos y que los cambios guardados aparezcan al volver al catálogo.
+Ejecutar también `supabase/migrations/20261109083537_allow_product_deletion.sql`
+para habilitar la eliminación. Seleccionar un producto y pulsar **Eliminar
+producto** para ver su nombre antes de confirmar. Para la prueba, crear un
+producto temporal, cancelar una vez y luego confirmar su eliminación.
 Las reglas de Supabase limitan la escritura a las cuentas autorizadas. Los
 visitantes conservan el acceso de lectura al catálogo.
 

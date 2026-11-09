@@ -2,7 +2,7 @@
   <section class="container page-space about-page" aria-labelledby="admin-title">
     <p class="eyebrow accent">ADMINISTRACIÓN</p>
     <h1 id="admin-title">Administrar productos</h1>
-    <p class="intro">Creá un producto nuevo o elegí uno del catálogo para editarlo.</p>
+    <p class="intro">Creá un producto nuevo o elegí uno del catálogo para editarlo o eliminarlo.</p>
 
     <div v-if="status !== 'ready'" class="about-panel">
       <p v-if="status === 'loading'" role="status">Comprobando el acceso y cargando el catálogo…</p>
@@ -12,7 +12,7 @@
         <router-link class="button" to="/cuenta">Ir a Mi cuenta</router-link>
       </template>
       <template v-else-if="status === 'denied'">
-        <p>Esta cuenta necesita permiso de administración para editar el catálogo.</p>
+        <p>Esta cuenta necesita permiso para administrar el catálogo.</p>
         <router-link class="text-link" to="/productos">Ver catálogo</router-link>
       </template>
       <template v-else>
@@ -22,7 +22,7 @@
     </div>
 
     <form v-else class="about-panel product-form" novalidate @submit.prevent="submit">
-      <fieldset :disabled="saving">
+      <fieldset :disabled="saving || deleting">
         <legend>{{ selectedId === '' ? 'Nuevo producto' : 'Editar producto' }}</legend>
         <label for="product-selection">Producto</label>
         <select id="product-selection" v-model="selectedId" @change="chooseProduct">
@@ -66,7 +66,19 @@
 
         <p v-if="message" role="alert" class="field-error">{{ message }}</p>
         <p v-if="savedId" role="status">Producto guardado. <router-link :to="{ name: 'product-detail', params: { id: savedId } }">Ver ficha</router-link></p>
-        <button class="button" type="submit">{{ saving ? 'Guardando…' : 'Guardar producto' }}</button>
+        <p v-if="deletedName" role="status">Se eliminó «{{ deletedName }}» del catálogo.</p>
+        <div v-if="pendingDelete" class="notice delete-notice" role="group" aria-labelledby="delete-title">
+          <h2 id="delete-title">¿Eliminar «{{ pendingDelete.name }}»?</h2>
+          <p>Se quitará del catálogo de forma permanente.</p>
+          <div class="product-form-actions">
+            <button ref="cancelDelete" class="button" type="button" @click="cancelDeletion">Cancelar</button>
+            <button class="button danger-button" type="button" @click="confirmDeletion">{{ deleting ? 'Eliminando…' : 'Confirmar eliminación' }}</button>
+          </div>
+        </div>
+        <div v-else class="product-form-actions">
+          <button class="button" type="submit">{{ saving ? 'Guardando…' : 'Guardar producto' }}</button>
+          <button v-if="selectedId !== ''" ref="askDelete" class="button danger-button" type="button" @click="askDeletion">Eliminar producto</button>
+        </div>
       </fieldset>
     </form>
   </section>
@@ -74,7 +86,7 @@
 
 <script>
 import { supabase } from '../services/supabase'
-import { catalog, loadCatalog, saveProduct } from '../services/catalog'
+import { catalog, deleteProduct, loadCatalog, saveProduct } from '../services/catalog'
 
 const colors = { lavender: 'Lavanda', mint: 'Menta', sand: 'Arena', peach: 'Durazno' }
 const emptyForm = () => ({ name: '', category: '', price: '', symbol: '📦', color: 'sand', description: '' })
@@ -84,7 +96,8 @@ export default {
   data() {
     return {
       catalog, colors, status: 'loading', selectedId: '', form: emptyForm(),
-      errors: {}, message: '', savedId: null, saving: false
+      errors: {}, message: '', savedId: null, saving: false,
+      pendingDelete: null, deleting: false, deletedName: ''
     }
   },
   mounted() { this.initialize() },
@@ -127,11 +140,14 @@ export default {
       this.errors = {}
       this.message = ''
       this.savedId = null
+      this.pendingDelete = null
+      this.deletedName = ''
     },
     async submit() {
-      if (this.saving || this.status !== 'ready') return
+      if (this.saving || this.deleting || this.pendingDelete || this.status !== 'ready') return
 
       this.savedId = null
+      this.deletedName = ''
       this.message = ''
       const { name, category, price, symbol, color, description } = this.form
       const errors = {}
@@ -158,6 +174,38 @@ export default {
       } finally {
         this.saving = false
       }
+    },
+    askDeletion() {
+      if (this.saving || this.deleting) return
+      const product = this.catalog.products.find(item => item.id === this.selectedId)
+      if (!product) return
+
+      this.pendingDelete = { id: product.id, name: product.name }
+      this.message = ''
+      this.savedId = null
+      this.$nextTick(() => this.$refs.cancelDelete?.focus())
+    },
+    cancelDeletion() {
+      this.pendingDelete = null
+      this.message = ''
+      this.$nextTick(() => this.$refs.askDelete?.focus())
+    },
+    async confirmDeletion() {
+      if (this.saving || this.deleting || !this.pendingDelete) return
+
+      const { id, name } = this.pendingDelete
+      this.deleting = true
+      this.message = ''
+      try {
+        await deleteProduct(id)
+        this.selectedId = ''
+        this.chooseProduct()
+        this.deletedName = name
+      } catch {
+        this.message = 'No pudimos confirmar la eliminación. Revisá el catálogo antes de volver a intentar.'
+      } finally {
+        this.deleting = false
+      }
     }
   }
 }
@@ -172,4 +220,9 @@ export default {
 .product-form textarea { width: 100%; font: inherit; color: inherit; border: 1px solid #cdd6cb; border-radius: 6px; padding: 12px; resize: vertical; }
 .product-form .field-error { color: #8a351e; }
 .product-form [aria-invalid='true'] { border-color: #a34b2b; }
+.product-form-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.product-form .delete-notice { background: #fff0e9; border-color: #a34b2b; }
+.product-form .delete-notice h2 { font-size: 1rem; }
+.product-form .danger-button { color: white; background: #8a351e; border-color: #8a351e; }
+.product-form .danger-button:hover:not(:disabled) { background: #672613; }
 </style>

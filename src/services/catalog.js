@@ -50,3 +50,11 @@ export async function saveProduct(product, id) {
     .sort((a, b) => a.id - b.id)
   return data
 }
+
+export async function deleteProduct(id) {
+  const { data, error } = await supabase.from('products').delete()
+    .eq('id', id).select('id').single()
+  if (error) throw error
+
+  state.products = state.products.filter(product => product.id !== data.id)
+}
