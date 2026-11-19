@@ -1,7 +1,7 @@
 # Nexo · Catálogo de productos
 
 Aplicación de página única para explorar productos de audio, escritorio y
-accesorios, guardar una selección y administrar el catálogo.
+accesorios, registrar pedidos y administrar el catálogo.
 
 Proyecto realizado por **Rodrigo Punturiero**.
 
@@ -38,10 +38,11 @@ Modo noche en celular
 - Carrito con cantidades, total estimado y persistencia en LocalStorage.
 - Modo noche con preferencia guardada y filtros del catálogo en la URL.
 - Inicio de sesión con Google y alta, edición y eliminación confirmada para administradores.
+- Registro de pedidos desde el carrito, historial por cuenta y gestión de pedidos para administradores.
 
 Los precios del catálogo local son ficticios y se muestran en ARS.
 Las ilustraciones locales son emojis; pueden verse diferentes según el sistema.
-No se realizan compras.
+Los pedidos se registran sin cobro en línea.
 
 ## Ejecutar
 Entorno de creación: Node 20.16.0 y npm 10.8.1.
@@ -88,6 +89,7 @@ Comprobar /productos/1 y /carrito también al abrirlos directamente y actualizar
 - src/data/products.js: los 15 productos locales y formato de precios.
 - src/services/catalog.js: lectura mediante Fetch, respaldo de muestra y CRUD.
 - src/services/cart.js: cantidades compartidas y persistencia del carrito.
+- src/services/orders.js: registro, consulta y cambios de estado de los pedidos.
 - src/services/theme.js: cambio de tema y persistencia de la preferencia.
 - src/styles/main.css: estilos, tamaños adaptables y animaciones.
 - public/index.html: HTML donde Vue monta la SPA.
@@ -111,6 +113,23 @@ del total y se puede quitar de la lista.
 Para verificarlo, agregar un producto dos veces, cambiar su cantidad,
 recargar `/carrito` y comprobar que se conservan la cantidad y el total.
 Luego quitarlo y comprobar el estado vacío.
+
+## Pedidos e historial
+
+Aplicar `supabase/migrations/20261119000000_create_orders.sql` en Supabase después
+de las migraciones del catálogo y de administradores. Las cuentas existentes
+pueden seguir ingresando con Google. Las que figuran en `public.product_admins`
+también pueden administrar pedidos.
+
+1. Agregar un producto del catálogo, iniciar sesión y elegir **Confirmar pedido**
+   en el carrito. Supabase guarda el pedido como pendiente con los nombres,
+   cantidades y precios del momento.
+2. Abrir **Mi cuenta → Mis pedidos** para ver el detalle, total y estado.
+   Cada cuenta puede consultar su propio historial.
+3. Iniciar sesión como administrador y abrir **Mi cuenta → Administrar pedidos**.
+   Desde ahí se pueden filtrar los pedidos y pasar un pedido pendiente a
+   preparación o cancelarlo. Un pedido en preparación se puede completar o
+   cancelar.
 
 ## Catálogo de Supabase
 

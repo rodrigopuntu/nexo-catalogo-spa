@@ -12,8 +12,8 @@ export const catalog = readonly(state)
 const productColumns = 'id,name,category,price,symbol,color,description'
 let pendingLoad = null
 
-export function loadCatalog() {
-  if (!supabase || state.source === 'supabase') return
+export function loadCatalog({ refresh = false } = {}) {
+  if (!supabase || (state.source === 'supabase' && !refresh)) return
   if (!pendingLoad) pendingLoad = fetchCatalog().finally(() => { pendingLoad = null })
   return pendingLoad
 }
